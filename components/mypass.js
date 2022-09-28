@@ -36,27 +36,22 @@ const Loader = (props) => {
 
 const MyPassPage = () => {
   const inset = useSafeAreaInsets()
-
   let [pageLoading, setPageLoading] = useState(false)
   let [fullLoading, setFullLoading] = useState(false)
   let [startPage, setStartPage] = useState(0)
   let [data, setData] = useState([])
 
   async function loadMore() {
-    if (setPageLoading == true) {
+    if (pageLoading == true) {
       return
     }
-    console.log('Load more called');
     setPageLoading(true)
-    setStartPage(startPage + 32)
+    startPage = startPage + 30
+    setStartPage(startPage)
     let res = await API.apiCall(startPage)
     setPageLoading(false)
     setData([...data, ...res.MD])
-
-    console.log(data.length);
   }
-
-
 
   useEffect(() => {
     async function getData() {
@@ -64,16 +59,14 @@ const MyPassPage = () => {
       let res = await API.apiCall(startPage)
       setFullLoading(false)
       setData(res.MD)
-      console.log(data.length);
     }
-    console.log('use effect called');
     getData()
   }, [])
 
   if (fullLoading == true) {
     return (
-      <View style={[{justifyContent: "center", alignItems: "center" },styles.container]}>
-        <Loader isLoading = {fullLoading}/>
+      <View style={[{ justifyContent: "center", alignItems: "center" }, styles.container]}>
+        <Loader isLoading={fullLoading} />
       </View>
     )
   }
@@ -94,9 +87,15 @@ const MyPassPage = () => {
         numColumns={1}
         renderItem={({ item }) => (<Tile data={item} />)}
         keyExtractor={item => item.meetings_id}
-        onEndReached={loadMore}
-        onEndReachedThreshold = {0}
-        initialNumToRender = {10}
+        onEndReached={() => {
+          if (!this.onEndReachedCalledDuringMomentum) {
+            loadMore()
+            this.onEndReachedCalledDuringMomentum = true
+          }
+        }}
+        onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
+        onEndReachedThreshold={0}
+        initialNumToRender={10}
         ListFooterComponent={<Loader isLoading={pageLoading} />}
       />
 
