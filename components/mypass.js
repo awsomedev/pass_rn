@@ -53,13 +53,14 @@ const MyPassPage = () => {
     setData([...data, ...res.MD])
   }
 
+  async function getData() {
+    setFullLoading(true)
+    let res = await API.apiCall(startPage)
+    setFullLoading(false)
+    setData(res.MD)
+  }
+
   useEffect(() => {
-    async function getData() {
-      setFullLoading(true)
-      let res = await API.apiCall(startPage)
-      setFullLoading(false)
-      setData(res.MD)
-    }
     getData()
   }, [])
 
@@ -73,15 +74,6 @@ const MyPassPage = () => {
 
   return (
     <View style={[styles.container]}>
-      <AppBar
-        title="My Pass"
-        titleStyle={styles.title}
-        centerTitle={true}
-        style={{
-          paddingTop: inset.top
-        }}
-        transparent={true}
-      />
       <FlatList
         data={data}
         numColumns={1}

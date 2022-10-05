@@ -16,7 +16,7 @@ import {
 
 const Tile = (props)=>{
     return(
-        <View style={styles.tileStyle}>
+        <View style={props.style? props.style : styles.tileStyle}>
             <View style ={{flexDirection: "row"}}>
                 <View style={styles.circle}>
                     <Image style={styles.circle} source = {{uri:props.data.image}}/>
