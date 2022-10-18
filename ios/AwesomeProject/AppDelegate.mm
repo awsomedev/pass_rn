@@ -1,4 +1,7 @@
 #import "AppDelegate.h"
+#if RCT_DEV
+#import <React/RCTDevLoadingView.h>
+#endif
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
@@ -32,6 +35,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   RCTAppSetupPrepareApp(application);
+  
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
 
@@ -44,6 +48,9 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 #endif
 
   NSDictionary *initProps = [self prepareInitialProps];
+#if RCT_DEV
+    [bridge moduleForClass:[RCTDevLoadingView class]];
+#endif
   UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"AwesomeProject", initProps);
 
   if (@available(iOS 13.0, *)) {

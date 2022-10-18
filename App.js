@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { Node } from 'react';
 import {
   Dimensions,
@@ -12,6 +12,7 @@ import {
   useColorScheme,
   useWindowDimensions,
   View,
+  TextInput,
 } from 'react-native';
 
 import {
@@ -23,51 +24,93 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
-import MyPassPage from './components/mypass';
-import HomeScreen from './components/homeScreen/home_screen';
+import MyPassPage from './View/screens/mypass/mypass';
+import HomeScreen from './View/screens/homeScreen/home_screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from './View/screens/loginScreen/loginScreen'
+import storage from './View/components/storage';
+import AppUtils from './View/components/utils';
+import globalStyle from './View/Style/globalStyle';
+import MyStack from './View/components/stack';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 
 
 const Stack = createNativeStackNavigator();
+const HomeStack = createNativeStackNavigator();
 
-const MyStack = () => {
 
-  const getTitle = (title)=>{
-    return ({
-      headerTitle :title, 
-      headerTitleStyle: {color:"white",fontWeight:"600",fontSize:18},
-      headerBackground:()=>(<View style={{backgroundColor:"#212253",flex:1}}></View>),
-      headerBackTitle: ""
-    })
-  }
-
+const HomeComponent = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="HomeScreen" component={HomeScreen} options={getTitle("MEET PASS")} />
-        <Stack.Screen
+      <HomeStack.Navigator>
+        <HomeStack.Screen name="HomeScreen" component={HomeScreen} />
+        <HomeStack.Screen
           name="MyPassPage"
           component={MyPassPage}
-          options={getTitle("MY PASS")}
         />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
+      </HomeStack.Navigator>
+  )
+}
 
+// const MyStack = () => {
+//   let [loading, setLoading] = useState(true)
+//   let [userId, setUserId] = useState('')
+
+//   const getData = async () => {
+//     var uid = await AppUtils.getUserId()
+//     setTimeout(() => {
+//       setLoading(false)
+//       if(uid){
+//         setUserId(uid)
+//       }
+//     }, 2000)
+//   }
+
+//   useEffect(() => {
+//     getData()
+//   }, [])
+//   if(loading){
+//     return (<View style={globalStyle.background}></View>)
+//   }
+//   return (
+//     <NavigationContainer>
+//       {
+//         userId?(
+//         <Stack.Navigator>
+//           <Stack.Screen name="HomeComponent" component={HomeComponent} options={{title:"Home Screen"}} />
+//         </Stack.Navigator>
+//         )
+//         :
+//         (
+//         <Stack.Navigator>
+//           <Stack.Screen name="LoginScreen" component={LoginScreen} />
+//           <Stack.Screen name="HomeComponent" component={HomeComponent} />
+//         </Stack.Navigator>
+//       )
+//       }
+//     </NavigationContainer >
+  
+//   );
+// };
 const App = () => {
   return (
-   <MyStack/>
+    <MyStack />
   );
 };
 
 
-const SafeArea = ()=>{
+const SafeArea = () => {
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+
     <SafeAreaProvider>
-      <App/>
+      <App />
     </SafeAreaProvider>
-)}
+    </GestureHandlerRootView>
+
+  )
+}
 export default SafeArea;
+
 

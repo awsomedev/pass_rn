@@ -38,6 +38,7 @@ const Tile = (props)=>{
 }
 
 
+
 const styles = StyleSheet.create({
     tileStyle:{
         backgroundColor: "#4D4F95",

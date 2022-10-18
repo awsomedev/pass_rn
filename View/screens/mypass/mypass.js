@@ -16,8 +16,10 @@ import {
 } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppBar } from "@react-native-material/core";
-import Tile from './taskTile';
-import API from '../api/api'
+import Tile from '../../components/taskTile';
+import API from '../../../api/api'
+import { useNavigation } from '@react-navigation/native';
+
 
 
 
@@ -40,6 +42,7 @@ const MyPassPage = () => {
   let [fullLoading, setFullLoading] = useState(false)
   let [startPage, setStartPage] = useState(0)
   let [data, setData] = useState([])
+  const navigation = useNavigation()
 
   async function loadMore() {
     if (pageLoading == true) {
@@ -62,6 +65,12 @@ const MyPassPage = () => {
 
   useEffect(() => {
     getData()
+    navigation.setOptions({
+      headerTitle :'MY PASS', 
+      headerTitleStyle: {color:"white",fontWeight:"600",fontSize:18},
+      headerBackground:()=>(<View style={{backgroundColor:"#212253",flex:1}}></View>),
+      headerBackTitle: "",
+    })
   }, [])
 
   if (fullLoading == true) {
@@ -89,6 +98,8 @@ const MyPassPage = () => {
         onEndReachedThreshold={0}
         initialNumToRender={10}
         ListFooterComponent={<Loader isLoading={pageLoading} />}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={100}
       />
 
     </View>
