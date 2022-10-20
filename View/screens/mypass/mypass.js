@@ -19,6 +19,7 @@ import { AppBar } from "@react-native-material/core";
 import Tile from '../../components/taskTile';
 import API from '../../../api/api'
 import { useNavigation } from '@react-navigation/native';
+import CustomAppBar from '../../components/appBar';
 
 
 
@@ -65,12 +66,6 @@ const MyPassPage = () => {
 
   useEffect(() => {
     getData()
-    navigation.setOptions({
-      headerTitle :'MY PASS', 
-      headerTitleStyle: {color:"white",fontWeight:"600",fontSize:18},
-      headerBackground:()=>(<View style={{backgroundColor:"#212253",flex:1}}></View>),
-      headerBackTitle: "",
-    })
   }, [])
 
   if (fullLoading == true) {
@@ -83,6 +78,12 @@ const MyPassPage = () => {
 
   return (
     <View style={[styles.container]}>
+      <CustomAppBar 
+        title="Pass Page"
+        leftPress={()=>{
+          navigation.goBack()
+        }}
+      />
       <FlatList
         data={data}
         numColumns={1}

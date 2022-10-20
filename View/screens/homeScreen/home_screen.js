@@ -23,6 +23,9 @@ import API from '../../../api/api';
 import Tile from '../../components/taskTile';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-ionicons'
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Drawer from '../../components/drawer';
+import CustomAppBar from '../../components/appBar';
 
 
 
@@ -30,6 +33,7 @@ import Icon from 'react-native-ionicons'
 const HomeScreen = () => {
 
     let [pageLoading, setPageLoading] = useState(true)
+    let [drawerShow, setDrawer] = useState(false)
     let [data, setData] = useState()
     const navigation = useNavigation()
 
@@ -84,8 +88,14 @@ const HomeScreen = () => {
     return (
         pageLoading == true ?
             <Loader /> :
-            <View style={[styles.container,{position:"relative"}]}>
-                <CustomAppBar/>
+            <View style={[styles.container]}>
+            <CustomAppBar 
+                leftPress={()=>{
+                    setDrawer(!drawerShow)
+                    
+                }}
+                leftButton="menu"
+            />
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Image source={{ uri: data?.home_slider?.image }} style={{ height: 180, borderRadius: 15, marginHorizontal: 20, marginBottom: 20 }} />
                     <View>
@@ -160,49 +170,16 @@ const HomeScreen = () => {
                             </View>
 
                         </View>
-                        {/* <View style={{backgroundColor:"#6357F6",height:1}}></View>
-                        <View style={{paddingHorizontal:15,paddingVertical:10}}>
-
-                        </View> */}
                     </View>
                 </ScrollView>
-                {/* <Drawer></Drawer> */}
+               <Drawer drawerShow={drawerShow} outsideClick={()=>{
+                setDrawer(!drawerShow) 
+               }}/>
             </View>
 
     )
 }
-const Drawer = () => {
-    return (
-        <View>
-        <View style={{
-            height: Dimensions.get("window").height, 
-            width: Dimensions.get("window").width/1.5, 
-            backgroundColor: "red", 
-            position: "absolute", 
-            top: 0,
-            left: 0,
-        }}></View>
-        </View>
-    )
-}
 
-const CustomAppBar = (props) => {
-    const insect = useSafeAreaInsets()
-    return (
-        <View style={{
-            height: 50+insect.top, 
-            width: Dimensions.get("window").width, 
-            paddingTop:insect.top,
-            backgroundColor:"transparent",
-            flexDirection:"row",
-            alignItems:"center",
-            justifyContent:"center"
-        }}>
-            <Text style={{color:"white",fontWeight:"600",fontSize:25,marginBottom:2}}>Meet Pass</Text>
-            <TouchableNativeFeedback><Icon name='menu' color='white' size={30} style={{position:"absolute",left:20,top:10+insect.top}}></Icon></TouchableNativeFeedback>
-        </View>
-    )
-}
 
 const styles = StyleSheet.create({
     container: {
